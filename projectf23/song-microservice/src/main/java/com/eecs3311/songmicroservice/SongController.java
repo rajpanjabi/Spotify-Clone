@@ -168,4 +168,75 @@ public class SongController {
 		
 		
 	}
+	
+	
+	@RequestMapping(value = "/composer", method = RequestMethod.PUT)
+	public ResponseEntity<Map<String, Object>> updateComposerName(@RequestBody Map<String, String> params, HttpServletRequest request) {
+
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("data", String.format("PUT %s", Utils.getUrl(request)));
+		System.out.println(params);
+		String id= params.get("songId");
+		String composerName= params.get("composerName");
+		
+		
+		
+		
+		System.out.println(id);
+		System.out.println(composerName);
+		
+		
+		DbQueryStatus dbQueryStatus = songDal.updateSongComposerName(id, composerName);
+
+          response.put("message", dbQueryStatus.getMessage());
+		 
+		 return Utils.setResponseStatus(response, dbQueryStatus.getdbQueryExecResult(), dbQueryStatus.getData());
+		
+	//	return null;
+		
+		
+	}
+	@RequestMapping(value = "/year", method = RequestMethod.PUT)
+	public ResponseEntity<Map<String, Object>> updateReleaseYear(@RequestBody Map<String, String> params, HttpServletRequest request) {
+
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("data", String.format("PUT %s", Utils.getUrl(request)));
+		System.out.println(params);
+		String id= params.get("songId");
+		Integer releaseYear= Integer.parseInt(params.get("releaseYear")) ;
+		
+		
+		
+		
+		System.out.println(id);
+		System.out.println(releaseYear);
+		
+		
+		DbQueryStatus dbQueryStatus = songDal.updateReleaseYear(id, releaseYear);
+
+          response.put("message", dbQueryStatus.getMessage());
+		 
+		 return Utils.setResponseStatus(response, dbQueryStatus.getdbQueryExecResult(), dbQueryStatus.getData());
+		
+	//	return null;
+		
+		
+	}
 }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
