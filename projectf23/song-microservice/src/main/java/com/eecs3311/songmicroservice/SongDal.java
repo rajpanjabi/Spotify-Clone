@@ -16,6 +16,10 @@ public interface SongDal {
 	
 	DbQueryStatus updateSongFavouritesCount(String songId, boolean shouldDecrement);
 	
+	DbQueryStatus updateSongComposerName(String songId, String composerName);
+	
+	DbQueryStatus updateReleaseYear(String songId, Integer releaseYear);
+	
 	
 	
 }

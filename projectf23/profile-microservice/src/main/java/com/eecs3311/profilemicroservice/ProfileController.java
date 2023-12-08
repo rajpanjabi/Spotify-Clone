@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eecs3311.profilemicroservice.Utils;
+//import com.eecs3311.songmicroservice.DbQueryStatus;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.Call;
@@ -53,18 +55,40 @@ public class ProfileController {
 
 		Map<String, Object> response = new HashMap<String, Object>();
 		response.put("path", String.format("POST %s", Utils.getUrl(request)));
-
-		return ResponseEntity.status(HttpStatus.OK).body(response); // TODO: replace with return statement similar to in getSongById
+		System.out.println(params);
+		    String userName = params.get("userName");
+	        String fullName = params.get("fullName");
+	        String password = params.get("password");
+		
+		DbQueryStatus dbQueryStatus = profileDriver.createUserProfile( userName,  fullName,  password);
+		response.put("message", dbQueryStatus.getMessage());
+        return Utils.setResponseStatus(response, dbQueryStatus.getdbQueryExecResult(), dbQueryStatus.getData());
+				
+				
 	}
-
+	
 	@RequestMapping(value = "/followFriend", method = RequestMethod.PUT)
 	public ResponseEntity<Map<String, Object>> followFriend(@RequestBody Map<String, String> params, HttpServletRequest request) {
 
 		Map<String, Object> response = new HashMap<String, Object>();
 		response.put("path", String.format("PUT %s", Utils.getUrl(request)));
+		System.out.println(params);
+		
+		    String userName = params.get("userName");
+	        String frndUserName = params.get("friendUserName");
+		
+		
+		DbQueryStatus dbQueryStatus = profileDriver.followFriend( userName, frndUserName);
+		response.put("message", dbQueryStatus.getMessage());
+        return Utils.setResponseStatus(response, dbQueryStatus.getdbQueryExecResult(), dbQueryStatus.getData());
+				
+		
+		
+		
+		
 		// TODO: add any other values to the map following the example in SongController.getSongById
 		
-		return ResponseEntity.status(HttpStatus.OK).body(response); // TODO: replace with return statement similar to in getSongById
+//		return ResponseEntity.status(HttpStatus.OK).body(response); // TODO: replace with return statement similar to in getSongById
 	}
 
 	@RequestMapping(value = "/getAllFriendFavouriteSongTitles/{userName}", method = RequestMethod.GET)
@@ -83,10 +107,23 @@ public class ProfileController {
 	public ResponseEntity<Map<String, Object>> unfollowFriend(@RequestBody Map<String, String> params, HttpServletRequest request) {
 
 		Map<String, Object> response = new HashMap<String, Object>();
+		
+		
+	    String userName = params.get("userName");
+        String frndUserName = params.get("friendUserName");
+        
 		response.put("path", String.format("PUT %s", Utils.getUrl(request)));
 		// TODO: add any other values to the map following the example in SongController.getSongById
+		
+		DbQueryStatus dbQueryStatus = profileDriver.unfollowFriend( userName, frndUserName);
+		response.put("message", dbQueryStatus.getMessage());
+        return Utils.setResponseStatus(response, dbQueryStatus.getdbQueryExecResult(), dbQueryStatus.getData());
+				
+		
+		
+		
 
-		return ResponseEntity.status(HttpStatus.OK).body(response); // TODO: replace with return statement similar to in getSongById
+//		return ResponseEntity.status(HttpStatus.OK).body(response); // TODO: replace with return statement similar to in getSongById
 	}
 
 	@RequestMapping(value = "/likeSong", method = RequestMethod.PUT)

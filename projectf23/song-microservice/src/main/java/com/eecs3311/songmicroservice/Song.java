@@ -19,6 +19,9 @@ public class Song {
 	private String songArtistFullName;
 	private String songAlbum;
 	private long songAmountFavourites;
+	private String composerName;
+	private Integer releaseYear;
+	
 	
 	public static final String KEY_SONG_NAME = "songName";
 	public static final String KEY_SONG_ARTIST_FULL_NAME = "songArtistFullName";
@@ -30,7 +33,19 @@ public class Song {
 		this.songArtistFullName = songArtistFullName;
 		this.songAlbum = songAlbum;
 		this.songAmountFavourites = 0;
+		this.composerName="";
+		this.releaseYear=0;
+		
 	}
+	
+//	public Song(String songName, String songArtistFullName, String songAlbum, String composerName, Integer releaseYear) {
+//		this.songName = songName;
+//		this.songArtistFullName = songArtistFullName;
+//		this.songAlbum = songAlbum;
+//		this.songAmountFavourites = 0;
+//		this.composerName=composerName;
+//		this.releaseYear=releaseYear;
+//	}
 
 	public String getSongName() {
 		return songName;
@@ -72,6 +87,25 @@ public class Song {
 	public void setId(ObjectId _id) {
 		this._id = _id;
 	}
+	
+	public String getComposerName() {
+		return composerName;
+	}
+	
+	
+	public Integer getReleaseYear() {
+		return releaseYear;
+	}
+	
+	public void setComposerName(String composerName) {
+		this.composerName=composerName;
+	}
+	
+	public void setReleaseYear(Integer releaseYear) {
+		this.releaseYear=releaseYear;
+	}
+	
+	
 	
 	@Override
 	public String toString() {

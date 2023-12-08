@@ -202,12 +202,35 @@ public class SongDalImpl implements SongDal {
 			return queryStatus;
 			
 		
-		
 	
-		
-		//return null;
 	}
 }
+
+	@Override
+	public DbQueryStatus updateSongComposerName(String songId, String composerName) {
+		
+		try{
+			
+			
+		}catch(Exception e) {
+			
+			
+		}
+		// TODO Auto-generated method stub
+		
+		return new DbQueryStatus("Song not found", DbQueryExecResult.QUERY_ERROR_GENERIC);
+		//return null;
+	}
+
+	@Override
+	public DbQueryStatus updateReleaseYear(String songId, Integer releaseYear) {
+		
+		
+		// TODO Auto-generated method stub
+		//return null;
+		
+		return new DbQueryStatus("Song not found", DbQueryExecResult.QUERY_ERROR_GENERIC);
+	}
 	
 	
 }

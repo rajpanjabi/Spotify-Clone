@@ -5,6 +5,7 @@ import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
 import org.springframework.stereotype.Repository;
 import org.neo4j.driver.v1.Transaction;
+import org.neo4j.driver.v1.Values;
 
 @Repository
 public class PlaylistDriverImpl implements PlaylistDriver {
@@ -33,12 +34,45 @@ public class PlaylistDriverImpl implements PlaylistDriver {
 
 	@Override
 	public DbQueryStatus likeSong(String userName, String songId) {
+		
+		
+		
+		
+		try(Session session = driver.session()){
+			
+			String query="";
+			StatementResult result= session.run(query, Values.parameters(null));
+			
+			
+		}catch(Exception e) {
+			
+			
+		}
 
 		return null;
 	}
 
 	@Override
 	public DbQueryStatus unlikeSong(String userName, String songId) {
+		
+		
+		
+		try(Session session = driver.session()){
+			
+			
+			String query="";
+			StatementResult result= session.run(query, Values.parameters(null));
+			
+			
+		}catch(Exception e) {
+			
+			
+		}
+		
+		
+		
+		
+		
 		
 		return null;
 	}
