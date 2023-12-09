@@ -247,66 +247,7 @@ public class SongDalImpl implements SongDal {
 		
 	}
 	
-	
-	
-////	
-////	
-////		if (foundSong.getSongAmountFavourites()>0) {
-//	
-//	foundSong.setSongAmountFavourites(foundSong.getSongAmountFavourites()-1);
-//    db.save(foundSong);
-//
-//    DbQueryStatus queryStatus=new DbQueryStatus("Song Favourite Count Updated Successfully", DbQueryExecResult.QUERY_OK);
-//    return queryStatus;
-//
-//}
-//else {
-//	
-//	 DbQueryStatus queryStatus=new DbQueryStatus("Cannot update count<0", DbQueryExecResult.QUERY_ERROR_GENERIC);
-//     return queryStatus;
-//
-//
-//}
-//}
-//
-//
-//else {
-//DbQueryStatus queryStatus=new DbQueryStatus("Should Decrement is false", DbQueryExecResult.QUERY_OK);
-//return queryStatus;
-//
-//
-//}
-//
-//
-//
-//}
-//
-//
-//
-//}catch(Exception e) {
-//
-//DbQueryStatus queryStatus=new DbQueryStatus("Failed to Update", DbQueryExecResult.QUERY_ERROR_NOT_FOUND);
-//return queryStatus;
-//
-//
-//
-//}
-//}
-//
-////}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 
 	@Override
 	public DbQueryStatus updateReleaseYear(String songId, Integer releaseYear) {
@@ -351,6 +292,22 @@ Integer releaseyear=releaseYear;
 		
 	
 		
+	}
+
+	@Override
+	public DbQueryStatus getSongsbyReleaseYear(Integer releaseYear) {
+		
+		Integer releaseyear=releaseYear;
+		
+		
+	//	Song Songs[] =new Array<Song> [];
+		
+		
+		
+		
+		
+		
+		return null;
 	}
 	
 	

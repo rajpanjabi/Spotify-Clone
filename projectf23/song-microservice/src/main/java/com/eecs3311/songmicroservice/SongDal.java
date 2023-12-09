@@ -21,5 +21,8 @@ public interface SongDal {
 	DbQueryStatus updateReleaseYear(String songId, Integer releaseYear);
 	
 	
+	DbQueryStatus getSongsbyReleaseYear(Integer releaseYear);
+	
+	
 	
 }

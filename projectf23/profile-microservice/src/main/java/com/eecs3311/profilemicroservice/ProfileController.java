@@ -16,6 +16,7 @@ import com.eecs3311.profilemicroservice.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.Call;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.Session;
 
 @RestController
 @RequestMapping
@@ -44,6 +46,7 @@ public class ProfileController {
 	private final PlaylistDriverImpl playlistDriver;
 
 	OkHttpClient client = new OkHttpClient();
+	private final ObjectMapper mapper = new ObjectMapper();  // 
 
 	public ProfileController(ProfileDriverImpl profileDriver, PlaylistDriverImpl playlistDriver) {
 		this.profileDriver = profileDriver;
@@ -107,16 +110,17 @@ public class ProfileController {
 	public ResponseEntity<Map<String, Object>> unfollowFriend(@RequestBody Map<String, String> params, HttpServletRequest request) {
 
 		Map<String, Object> response = new HashMap<String, Object>();
-		
+		response.put("path", String.format("PUT %s", Utils.getUrl(request)));
 		
 	    String userName = params.get("userName");
         String frndUserName = params.get("friendUserName");
         
-		response.put("path", String.format("PUT %s", Utils.getUrl(request)));
+//		response.put("path", String.format("PUT %s", Utils.getUrl(request)));
 		// TODO: add any other values to the map following the example in SongController.getSongById
 		
 		DbQueryStatus dbQueryStatus = profileDriver.unfollowFriend( userName, frndUserName);
-		response.put("message", dbQueryStatus.getMessage());
+     	response.put("message", dbQueryStatus.getMessage());
+		
         return Utils.setResponseStatus(response, dbQueryStatus.getdbQueryExecResult(), dbQueryStatus.getData());
 				
 		
@@ -128,21 +132,46 @@ public class ProfileController {
 
 	@RequestMapping(value = "/likeSong", method = RequestMethod.PUT)
 	public ResponseEntity<Map<String, Object>> likeSong(@RequestBody Map<String, String> params, HttpServletRequest request) {
+		
+		String userName = params.get("userName");
+        String songId = params.get("songId");
+        Map<String, Object> response = new HashMap<String, Object>();
+		
+        
+        
+        DbQueryStatus dbQueryStatus =playlistDriver.likeSong(userName, songId);
 
-		Map<String, Object> response = new HashMap<String, Object>();
-		response.put("path", String.format("PUT %s", Utils.getUrl(request)));
-		// TODO: add any other values to the map following the example in SongController.getSongById
+     	response.put("message", dbQueryStatus.getMessage());
+		response.put("message", dbQueryStatus.getMessage());
+        return Utils.setResponseStatus(response, dbQueryStatus.getdbQueryExecResult(), dbQueryStatus.getData());
+				
+        
 
-		return ResponseEntity.status(HttpStatus.OK).body(response); // TODO: replace with return statement similar to in getSongById
 	}
-
+		
+		
+		
+		
+		
+		
 	@RequestMapping(value = "/unlikeSong", method = RequestMethod.PUT)
 	public ResponseEntity<Map<String, Object>> unlikeSong(@RequestBody Map<String, String> params, HttpServletRequest request) {
 
 		Map<String, Object> response = new HashMap<String, Object>();
-		response.put("path", String.format("PUT %s", Utils.getUrl(request)));
+//		response.put("path", String.format("PUT %s", Utils.getUrl(request)));
+		
+		    String userName = params.get("userName");
+	        String songId = params.get("songId"); 
+		
+		
+
+		DbQueryStatus dbQueryStatus = playlistDriver.unlikeSong(userName, songId);
+		response.put("message", dbQueryStatus.getMessage());
+        return Utils.setResponseStatus(response, dbQueryStatus.getdbQueryExecResult(), dbQueryStatus.getData());
+				
+		
 		// TODO: add any other values to the map following the example in SongController.getSongById
 
-		return ResponseEntity.status(HttpStatus.OK).body(response); // TODO: replace with return statement similar to in getSongById
+//		return ResponseEntity.status(HttpStatus.OK).body(response); // TODO: replace with return statement similar to in getSongById
 	}
 }

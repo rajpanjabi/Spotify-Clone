@@ -53,32 +53,37 @@ public class ProfileDriverImpl implements ProfileDriver {
 	@Override
 	public DbQueryStatus createUserProfile(String userName, String fullName, String password) {
 		
-		
-	    
-	    try (Session session = driver.session()) {
-	        String query = "MERGE (p:profile {userName: $userName, fullName: $fullName, password: $password}) RETURN p";
-	        StatementResult result = session.run(query, Values.parameters("userName", userName, "fullName", fullName, "password", password));
+		try (Session session = driver.session()) {
 	        
-	        if (result.hasNext()) {
-	        	
-	        	DbQueryStatus queryStatus =new DbQueryStatus("Profile created or already exists",DbQueryExecResult.QUERY_OK);
-	        	 return queryStatus;
+	        try (Transaction trans = session.beginTransaction()) {
 	           
-	        } else {
 	        	
-	        	DbQueryStatus queryStatus =new DbQueryStatus("No profile was created",DbQueryExecResult.QUERY_ERROR_NOT_FOUND);
-	        	 return queryStatus;
-	        	
-	           }
+	            String profileQuery = "MERGE (p:profile {userName: $userName, fullName: $fullName, password: $password}) RETURN p";
+	            StatementResult profileResult = trans.run(profileQuery, Values.parameters("userName", userName, "fullName", fullName, "password", password));
+
+	          
+	            String playlistName = userName + "-favorites";
+	            String playlistQuery = "MERGE (pl:playlist {plName: $playlistName}) RETURN pl";
+	            trans.run(playlistQuery, Values.parameters("playlistName", playlistName));
+
+	            String relationQuery = "MATCH (p:profile {userName: $userName}), (pl:playlist {plName: $playlistName}) MERGE (p)-[:created]->(pl)";
+	            trans.run(relationQuery, Values.parameters("userName", userName, "playlistName", playlistName));
+
+	            trans.success();
+
+	            if (profileResult.hasNext()) {
+	                return new DbQueryStatus("Profile created or already exists", DbQueryExecResult.QUERY_OK);
+	            } else {
+	                return new DbQueryStatus("No profile was created", DbQueryExecResult.QUERY_ERROR_NOT_FOUND);
+	            }
+	        }
 	    } catch (Exception e) {
-	       
-	        DbQueryStatus queryStatus =new DbQueryStatus( e.getMessage() ,DbQueryExecResult.QUERY_ERROR_GENERIC);
-	        return queryStatus;
+	        return new DbQueryStatus(e.getMessage(), DbQueryExecResult.QUERY_ERROR_GENERIC);
 	    }
+		
+		
 	    
-	 
-		
-		
+	    
 		
 	}
 	
@@ -125,38 +130,60 @@ public class ProfileDriverImpl implements ProfileDriver {
 	public DbQueryStatus unfollowFriend(String userName, String frndUserName) {
 		
 		
-		try(Session session= driver.session()){
-			String query="MATCH(user:profile {username: $userName})-[r:follows]->(friend:profile {userName: $friendUserName}) DELETE r RETURN user, friend";
-			
-			StatementResult result= session.run(query, Values.parameters("userName", userName, "friendUserName", frndUserName));
-			
-			
-			if (result.hasNext()) {
-				
-				DbQueryStatus queryStatus= new DbQueryStatus("Unfollowed Succesfully", DbQueryExecResult.QUERY_OK );
-				return queryStatus;
-				
-			}
-			
-			else {
-				DbQueryStatus queryStatus =new DbQueryStatus(" unfollow Unsuccessfull",DbQueryExecResult.QUERY_ERROR_NOT_FOUND);
-	        	 return queryStatus;
-			}
-			
-			
-			
-		}catch(Exception e) {
-			DbQueryStatus queryStatus =new DbQueryStatus(e.getMessage() , DbQueryExecResult.QUERY_ERROR_GENERIC);
-       	   return queryStatus;
-			
-			
+		
+		
+		 try (Session session = driver.session()) {
+		        String query = "MATCH (user:profile {userName: $userName})-[r:follows]->(friend:profile {userName: $friendUserName}) DELETE r RETURN user, friend";
+		        StatementResult result = session.run(query, Values.parameters("userName", userName, "friendUserName", frndUserName));
+
+		        if (result.hasNext()) {
+		            return new DbQueryStatus("Unfollowed successfully", DbQueryExecResult.QUERY_OK);
+		        } else {
+		            return new DbQueryStatus("Unfollow unsuccessful: Relationship does not exist", DbQueryExecResult.QUERY_ERROR_NOT_FOUND);
+		        }
+		    } catch (Exception e) {
+		        return new DbQueryStatus("Error: " + e.getMessage(), DbQueryExecResult.QUERY_ERROR_GENERIC);
+		    }
 		}
 		
-	}
+
 
 	@Override
 	public DbQueryStatus getAllSongFriendsLike(String userName) {
-			
-		return null;
-	}
+		
+//		try(Session session= driver.session()){
+//			
+//			String query="MATCH(user:profile {username: $userName})-[r:follows]->(friend:profile {userName: $friendUserName}) DELETE r RETURN user, friend";
+//			
+//			StatementResult result= session.run(query, Values.parameters("userName", userName, "friendUserName", frndUserName));
+//			
+//			
+//			if (result.hasNext()) {
+//				
+//				DbQueryStatus queryStatus= new DbQueryStatus("Unfollowed Succesfully", DbQueryExecResult.QUERY_OK );
+//				return queryStatus;
+//				
+//			}
+//			
+//			else {
+//				DbQueryStatus queryStatus =new DbQueryStatus(" unfollow Unsuccessfull",DbQueryExecResult.QUERY_ERROR_NOT_FOUND);
+//	        	 return queryStatus;
+//			}
+//			
+//			
+//			
+//		}catch(Exception e) {
+//			DbQueryStatus queryStatus =new DbQueryStatus(e.getMessage() , DbQueryExecResult.QUERY_ERROR_GENERIC);
+//       	   return queryStatus;
+//			
+//			
+//		}
+//		
+//	
+//	}
+//		
+		
+		return  null;
+	}	
+	
 }
